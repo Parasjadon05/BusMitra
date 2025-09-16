@@ -147,11 +147,11 @@ export default function NearbyBusStands({
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-1">
                       <Navigation className="h-4 w-4" />
-                      <span>{mapService.formatDistance(busStand.distance)}</span>
+                      <span>{mapService.formatDistance(busStand.distance ?? 0)}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      <span>~{Math.ceil(busStand.distance / 100)} min walk</span>
+                      <span>~{Math.ceil((busStand.distance ?? 0) / 100)} min walk</span>
                     </div>
                   </div>
 

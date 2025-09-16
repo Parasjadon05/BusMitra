@@ -13,9 +13,12 @@ interface BusStand {
   address: string
   routes: string[]
   distance?: number
+  coordinates: [number, number]
+  type: string
 }
 
-import { MapPin, Navigation, Bus, Wifi, WifiOff } from 'lucide-react'
+// Icons used in JSX below
+// no icon imports needed here
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 export interface BusLocation {
@@ -66,8 +69,6 @@ export default function MapComponent({
   const map = useRef<maplibregl.Map | null>(null)
   const [isMapLoaded, setIsMapLoaded] = useState(false)
   const busMarker = useRef<maplibregl.Marker | null>(null)
-  const userMarker = useRef<maplibregl.Marker | null>(null)
-  const routeLine = useRef<maplibregl.LineLayer | null>(null)
   const [previousBusLocation, setPreviousBusLocation] = useState<BusLocation | null>(null)
   const [calculatedSpeed, setCalculatedSpeed] = useState<number | null>(null)
   const [etaToUserStop, setEtaToUserStop] = useState<string | null>(null)

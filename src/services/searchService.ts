@@ -1,5 +1,5 @@
-import { googleMapsService, PlaceResult, Location } from './googleMapsService'
-import { routeService, Route, Bus, Driver } from './routeService'
+import { googleMapsService, Location } from './googleMapsService'
+import { routeService, Route, Bus } from './routeService'
 
 export interface SearchSuggestion {
   id: string

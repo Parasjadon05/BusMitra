@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Assuming React Router for navigation
-import { onAuthStateChanged, getAuth, signOut } from 'firebase/auth'; // Firebase auth imports
+import { onAuthStateChanged, signOut } from 'firebase/auth'; // Firebase auth imports
 import { auth } from '@/lib/firebase'; // Adjust path based on your project structure
 
 function Navbar() {

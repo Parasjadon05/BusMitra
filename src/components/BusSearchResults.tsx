@@ -18,13 +18,13 @@ interface BusSearchResult {
     lat: number
     lng: number
     name: string
-    distance: string
+    distance: number
   }
   toLocation: {
     lat: number
     lng: number
     name: string
-    distance: string
+    distance: number
   }
   estimatedTime: string
   estimatedFare: number

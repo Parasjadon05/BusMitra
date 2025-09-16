@@ -77,7 +77,8 @@ const mockDrivers: Driver[] = [
   {
     id: 'DRV001',
     name: 'Rajesh Kumar',
-    phone: '+91-9876543210'
+    phone: '+91-9876543210',
+    license: 'TEMP-000'
   }
 ]
 
@@ -203,6 +204,11 @@ export interface Bus {
   number: string
   type: string
   capacity: number
+  busNumber?: string
+  busName?: string
+  status?: string
+  assignedRoute?: string
+  driverId?: string
 }
 
 export interface Driver {
