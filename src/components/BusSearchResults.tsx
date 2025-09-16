@@ -1,8 +1,22 @@
-import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { BusSearchResult } from '@/services/busSearchService'
+
+interface BusSearchResult {
+  id: string
+  busNumber: string
+  route: string
+  from: string
+  to: string
+  departureTime: string
+  arrivalTime: string
+  fare: number
+  distance: string
+  duration: string
+  stops: string[]
+  status: 'on-time' | 'delayed' | 'early'
+  busType: 'AC' | 'Non-AC' | 'Deluxe'
+}
 import { 
   Bus, 
   MapPin, 

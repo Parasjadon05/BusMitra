@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import maplibregl from 'maplibre-gl'
 import { mapConfig } from '@/config/tomtom.config'
-import { BusStand, UserLocation } from '@/services/mapService'
+import { UserLocation } from '@/services/mapService'
+
+export interface BusStand {
+  id: string
+  name: string
+  location: {
+    lat: number
+    lng: number
+  }
+  address: string
+  routes: string[]
+  distance?: number
+}
 import { MapPin, Navigation, Bus, Wifi, WifiOff } from 'lucide-react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 

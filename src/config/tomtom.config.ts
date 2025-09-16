@@ -5,10 +5,10 @@ export const mapConfig = {
   baseUrl: 'https://api.tomtom.com', // Keep for search functionality
   // Use OpenStreetMap tiles (free and reliable)
   mapStyle: {
-    version: 8,
+    version: 8 as const,
     sources: {
       'osm': {
-        type: 'raster',
+        type: 'raster' as const,
         tiles: [
           'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
         ],
@@ -19,12 +19,12 @@ export const mapConfig = {
     layers: [
       {
         id: 'osm-layer',
-        type: 'raster',
+        type: 'raster' as const,
         source: 'osm'
       }
     ]
   },
-  defaultCenter: [77.2090, 28.6139], // Delhi, India coordinates
+  defaultCenter: [77.2090, 28.6139] as [number, number], // Delhi, India coordinates
   defaultZoom: 12,
   searchRadius: 10000, // 10km radius for bus stand search
   maxResults: 10
