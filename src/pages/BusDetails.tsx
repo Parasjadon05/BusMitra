@@ -951,17 +951,18 @@ export default function BusDetails() {
               <CardContent className="p-4 sm:p-6 h-full flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-gray-900">Route Stops</h3>
+                  {/* Only show collapse button on mobile */}
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsRoutePanelExpanded(!isRoutePanelExpanded)}
-                    className="text-xs sm:text-sm"
+                    className="text-xs sm:text-sm lg:hidden"
                   >
                     {isRoutePanelExpanded ? 'Collapse' : 'Expand'}
                   </Button>
                 </div>
                 
-                <div className={`${isRoutePanelExpanded ? 'flex-1' : 'max-h-64'} overflow-y-auto`}>
+                <div className={`${isRoutePanelExpanded ? 'flex-1' : 'max-h-64'} lg:flex-1 overflow-y-auto`}>
                   <div className="space-y-2">
                     {routeStops.map((stop, index) => (
                       <div key={stop.id} className="flex items-center space-x-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 border-l-4 border-[#87281B]">
