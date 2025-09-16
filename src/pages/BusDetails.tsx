@@ -107,6 +107,7 @@ export default function BusDetails() {
   const [isLoadingRoute, setIsLoadingRoute] = useState(false)
   const [routeError, setRouteError] = useState<string | null>(null)
   const [isRouteDataLoaded, setIsRouteDataLoaded] = useState(false)
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false)
   
   // Get user coordinates from navigation state or use default
   const userCoordinates = location.state?.fromCoordinates || { lat: 12.8249, lng: 80.0461 }
@@ -506,8 +507,13 @@ export default function BusDetails() {
     }
   }, [])
 
-  // Handle map load
+  // Handle map load - optimized to prevent unnecessary re-renders
   const onMapLoad = useCallback((map: google.maps.Map) => {
+    if (mapRef.current) {
+      console.log('🗺️ Map already loaded, skipping re-initialization')
+      return
+    }
+    
     mapRef.current = map
     setIsMapLoaded(true)
     
@@ -543,9 +549,36 @@ export default function BusDetails() {
     
     // Don't create bus marker here - let the useEffect handle it
     console.log('🗺️ Map loaded, bus marker will be handled by useEffect')
-  }, [matchedUserStop, routeStops, liveBusData, driverStatus])
+  }, []) // Remove dependencies to prevent re-creation
 
-  // Create and update bus marker
+  // Separate effect to handle map centering when route data changes
+  useEffect(() => {
+    if (mapRef.current && (matchedUserStop || routeStops.length > 0)) {
+      const setStableCenter = () => {
+        if (matchedUserStop) {
+          // Center on user's selected stop
+          mapRef.current!.setCenter({
+            lat: matchedUserStop.latitude,
+            lng: matchedUserStop.longitude
+          })
+          console.log('📍 Map re-centered on user stop:', matchedUserStop.name)
+        } else if (routeStops.length > 0) {
+          // Center on middle of route
+          const middleIndex = Math.floor(routeStops.length / 2)
+          const middleStop = routeStops[middleIndex]
+          mapRef.current!.setCenter({
+            lat: middleStop.latitude,
+            lng: middleStop.longitude
+          })
+          console.log('📍 Map re-centered on route middle:', middleStop.name)
+        }
+      }
+      
+      setStableCenter()
+    }
+  }, [matchedUserStop, routeStops])
+
+  // Create and update bus marker - optimized to prevent unnecessary re-renders
   useEffect(() => {
     console.log('🚌 Bus marker useEffect triggered:', {
       isMapLoaded,
@@ -576,13 +609,20 @@ export default function BusDetails() {
       return
     }
 
-    // Add a small delay to ensure map is fully rendered
-    const timer = setTimeout(() => {
+    // Only create marker if it doesn't exist, otherwise just update position
+    if (!busMarkerRef.current) {
       createBusMarker()
-    }, 200)
-
-    return () => clearTimeout(timer)
+    } else {
+      updateBusMarkerPosition()
+    }
   }, [isMapLoaded, liveBusData, driverStatus, isLoadingRoute, isRouteDataLoaded])
+
+  // Separate effect for updating marker position when coordinates change
+  useEffect(() => {
+    if (busMarkerRef.current && liveBusData && driverStatus === 'available' && isMapLoaded) {
+      updateBusMarkerPosition()
+    }
+  }, [liveBusData?.latitude, liveBusData?.longitude, isMapLoaded, driverStatus])
 
   const createBusMarker = () => {
     if (!mapRef.current || !liveBusData || driverStatus !== 'available') return
@@ -604,34 +644,20 @@ export default function BusDetails() {
         lng: lng
       }
 
-      // Create bus marker if it doesn't exist
-      if (!busMarkerRef.current) {
-        console.log('🚌 Creating bus marker with live data')
-        busMarkerRef.current = new google.maps.Marker({
-          position: position,
-          map: mapRef.current,
-          title: `Bus ${liveBusData.busNumber}`,
-          icon: {
-            url: 'https://maps.google.com/mapfiles/ms/icons/bus.png',
-            scaledSize: new google.maps.Size(50, 50),
-            anchor: new google.maps.Point(25, 25)
-          },
-          animation: google.maps.Animation.DROP,
-          zIndex: 1000
-        })
-        console.log('✅ Created bus marker')
-      } else {
-        // Update existing marker position smoothly
-        busMarkerRef.current.setPosition(position)
-        busMarkerRef.current.setTitle(`Bus ${liveBusData.busNumber}`)
-        console.log('🚌 Updated bus marker position')
-      }
-      
-      // Optionally center map on bus if follow mode is enabled
-      if (followBus && mapRef.current) {
-        mapRef.current.setCenter(position)
-        console.log('🎯 Following bus - centered map on bus position')
-      }
+      console.log('🚌 Creating bus marker with live data')
+      busMarkerRef.current = new google.maps.Marker({
+        position: position,
+        map: mapRef.current,
+        title: `Bus ${liveBusData.busNumber}`,
+        icon: {
+          url: 'https://maps.google.com/mapfiles/ms/icons/bus.png',
+          scaledSize: new google.maps.Size(50, 50),
+          anchor: new google.maps.Point(25, 25)
+        },
+        animation: google.maps.Animation.DROP,
+        zIndex: 1000
+      })
+      console.log('✅ Created bus marker')
 
       // Add info window with error handling
       const infoWindow = new google.maps.InfoWindow({
@@ -651,13 +677,11 @@ export default function BusDetails() {
         `
       })
 
-      if (busMarkerRef.current) {
-        busMarkerRef.current.addListener('click', () => {
-          if (mapRef.current) {
-            infoWindow.open(mapRef.current, busMarkerRef.current)
-          }
-        })
-      }
+      busMarkerRef.current.addListener('click', () => {
+        if (mapRef.current) {
+          infoWindow.open(mapRef.current, busMarkerRef.current)
+        }
+      })
 
       // Center map on bus location with error handling
       if (mapRef.current) {
@@ -665,7 +689,41 @@ export default function BusDetails() {
         mapRef.current.setZoom(15)
       }
     } catch (error) {
-      console.error('Error updating bus marker:', error)
+      console.error('Error creating bus marker:', error)
+    }
+  }
+
+  const updateBusMarkerPosition = () => {
+    if (!busMarkerRef.current || !liveBusData || !mapRef.current) return
+
+    try {
+      // Validate coordinates before using them
+      const lat = Number(liveBusData.latitude)
+      const lng = Number(liveBusData.longitude)
+      
+      if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
+        console.warn('❌ Invalid coordinates for marker update:', { lat, lng })
+        return
+      }
+
+      const position = {
+        lat: lat,
+        lng: lng
+      }
+
+      // Update marker position smoothly without recreating
+      busMarkerRef.current.setPosition(position)
+      busMarkerRef.current.setTitle(`Bus ${liveBusData.busNumber}`)
+      
+      console.log('🚌 Updated bus marker position smoothly:', position)
+      
+      // Optionally center map on bus if follow mode is enabled
+      if (followBus && mapRef.current) {
+        mapRef.current.setCenter(position)
+        console.log('🎯 Following bus - centered map on bus position')
+      }
+    } catch (error) {
+      console.error('Error updating bus marker position:', error)
     }
   }
 
@@ -944,23 +1002,29 @@ export default function BusDetails() {
                 ) : (
                   <LoadScript
                     googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-                    onLoad={() => setIsMapLoaded(true)}
+                    onLoad={() => {
+                      setIsScriptLoaded(true)
+                      setIsMapLoaded(true)
+                    }}
+                    loadingElement={<div className="h-full bg-gray-100 flex items-center justify-center">Loading Map...</div>}
                   >
-                    <GoogleMap
-                      mapContainerStyle={mapContainerStyle}
-                      center={{ lat: 12.8249, lng: 80.0461 }} // Fixed center - will be updated in onMapLoad
-                      zoom={15}
-                      onLoad={onMapLoad}
-                      options={{
-                        disableDefaultUI: false,
-                        zoomControl: true,
-                        streetViewControl: false,
-                        mapTypeControl: false,
-                        fullscreenControl: false
-                      }}
-                    >
-                      {/* Directions will be rendered here */}
-                    </GoogleMap>
+                    {isScriptLoaded && (
+                      <GoogleMap
+                        mapContainerStyle={mapContainerStyle}
+                        center={{ lat: 12.8249, lng: 80.0461 }} // Fixed center - will be updated in onMapLoad
+                        zoom={15}
+                        onLoad={onMapLoad}
+                        options={{
+                          disableDefaultUI: false,
+                          zoomControl: true,
+                          streetViewControl: false,
+                          mapTypeControl: false,
+                          fullscreenControl: false
+                        }}
+                      >
+                        {/* Directions will be rendered here */}
+                      </GoogleMap>
+                    )}
                   </LoadScript>
                 )}
                 
