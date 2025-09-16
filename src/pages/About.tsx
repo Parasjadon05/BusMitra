@@ -39,38 +39,34 @@ function About() {
           <h2 className="text-2xl sm:text-3xl font-semibold text-[#87281B] text-center mb-6">
             Meet Our Team
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900">Nidhish Rathore</h3>
-              <p className="text-sm sm:text-base text-gray-600">Full Stack Engineer</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900">Paras</h3>
-              <p className="text-sm sm:text-base text-gray-600">ML Engineer</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900">Varad Singhal</h3>
-              <p className="text-sm sm:text-base text-gray-600">Application Developer</p>
-            </div>
-             <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900">Akshat Soni</h3>
-              <p className="text-sm sm:text-base text-gray-600">Backend Engineer</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900">Chaandrayee Dutta</h3>
-              <p className="text-sm sm:text-base text-gray-600">UI/UX Designer</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-900">Anushka Rakesh</h3>
-              <p className="text-sm sm:text-base text-gray-600">Researcher</p>
-            </div>
-          </div>
+          {(() => {
+            const team = [
+              { name: 'Nidhish Rathore', role: 'Full Stack Engineer', image: '/Nidhish.jpg' },
+              { name: 'Paras', role: 'ML Engineer', image: '/Paras.jpeg' },
+              { name: 'Varad Singhal', role: 'Application Developer', image: '/Varad.jpeg' },
+              { name: 'Akshat Soni', role: 'Backend Engineer', image: '/Akshat.jpeg' },
+              { name: 'Chaandrayee Dutta', role: 'UI/UX Designer', image: '/Chaandrayee.jpeg' },
+              { name: 'Anushka Rakesh', role: 'Researcher', image: '/Anushka.jpeg' },
+            ]
+            const fallbackSrc = '/logo.png'
+            return (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {team.map(member => (
+                  <div key={member.name} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = fallbackSrc }}
+                      className="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-2 ring-gray-200"
+                      loading="lazy"
+                    />
+                    <h3 className="text-lg sm:text-xl font-medium text-gray-900">{member.name}</h3>
+                    <p className="text-sm sm:text-base text-gray-600">{member.role}</p>
+                  </div>
+                ))}
+              </div>
+            )
+          })()}
         </div>
 
      
