@@ -817,100 +817,109 @@ export default function BusDetails() {
       {/* Top Section - Bus Details and Journey Details */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate('/discover')}
-                className="mr-4"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
-              </Button>
+          <div className="py-4 sm:py-6">
+            {/* Mobile-first header layout */}
+            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <div className="flex items-center space-x-3">
-                <div className="p-2 bg-[#87281B] rounded-lg">
-                  <Bus className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {busDetails?.bus.busNumber || 'BUS-002'}
-                  </h1>
-                  <p className="text-lg text-gray-600">
-                    {busDetails?.route.routeName || 'Route 23C: Besant Nagar to Vadapalani'}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Driver: {busDetails?.driver?.name || 'Rajesh Kumar'}
-                  </p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate('/discover')}
+                  className="flex-shrink-0"
+                >
+                  <ArrowLeft className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Back</span>
+                </Button>
+                <div className="flex items-center space-x-3 min-w-0 flex-1">
+                  <div className="p-2 bg-[#87281B] rounded-lg flex-shrink-0">
+                    <Bus className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                      {busDetails?.bus.busNumber || 'BUS-002'}
+                    </h1>
+                    <p className="text-sm sm:text-lg text-gray-600 truncate">
+                      {busDetails?.route.routeName || 'Route 23C: Besant Nagar to Vadapalani'}
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-500 truncate">
+                      Driver: {busDetails?.driver?.name || 'Rajesh Kumar'}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              {liveBusData && (
-                <div className="flex items-center space-x-2">
-                  <Badge variant={liveBusData.isOnline ? "default" : "secondary"} className="px-3 py-1">
-                    {liveBusData.isOnline ? (
-                      <>
-                        <Wifi className="h-3 w-3 mr-1" />
-                        Online
-                      </>
-                    ) : (
-                      <>
-                        <WifiOff className="h-3 w-3 mr-1" />
-                        Offline
-                      </>
-                    )}
-                  </Badge>
-                  <Badge variant={liveBusData.isOnDuty ? "default" : "secondary"} className="px-3 py-1">
-                    {liveBusData.isOnDuty ? 'On Duty' : 'Off Duty'}
-                  </Badge>
+              
+              {/* Status badges - responsive layout */}
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+                {liveBusData && (
+                  <div className="flex items-center space-x-2">
+                    <Badge variant={liveBusData.isOnline ? "default" : "secondary"} className="px-2 py-1 text-xs">
+                      {liveBusData.isOnline ? (
+                        <>
+                          <Wifi className="h-3 w-3 mr-1" />
+                          <span className="hidden sm:inline">Online</span>
+                          <span className="sm:hidden">On</span>
+                        </>
+                      ) : (
+                        <>
+                          <WifiOff className="h-3 w-3 mr-1" />
+                          <span className="hidden sm:inline">Offline</span>
+                          <span className="sm:hidden">Off</span>
+                        </>
+                      )}
+                    </Badge>
+                    <Badge variant={liveBusData.isOnDuty ? "default" : "secondary"} className="px-2 py-1 text-xs">
+                      <span className="hidden sm:inline">{liveBusData.isOnDuty ? 'On Duty' : 'Off Duty'}</span>
+                      <span className="sm:hidden">{liveBusData.isOnDuty ? 'On' : 'Off'}</span>
+                    </Badge>
+                  </div>
+                )}
+                <div className="text-right">
+                  <p className="text-xs sm:text-sm text-gray-500">Route:</p>
+                  <p className="text-xs sm:text-sm font-medium">{busDetails?.route.id || 'route_23C'}</p>
                 </div>
-              )}
-              <div className="text-right">
-                <p className="text-sm text-gray-500">Route:</p>
-                <p className="text-sm font-medium">{busDetails?.route.id || 'route_23C'}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content Area - Split Layout */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-200px)]">
+      {/* Main Content Area - Mobile-first responsive layout */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-6">
           
-          {/* Left Panel - Route of Selected Bus from Start to End */}
-          <div className="lg:col-span-1">
-            <Card className="h-full">
-              <CardContent className="p-6 h-full flex flex-col">
+          {/* Route Stops Panel - Mobile: Full width, Desktop: Sidebar */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <Card className="h-auto lg:h-[calc(100vh-200px)]">
+              <CardContent className="p-4 sm:p-6 h-full flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-gray-900">Route Stops</h3>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsRoutePanelExpanded(!isRoutePanelExpanded)}
+                    className="text-xs sm:text-sm"
                   >
                     {isRoutePanelExpanded ? 'Collapse' : 'Expand'}
                   </Button>
                 </div>
                 
-                <div className="flex-1 overflow-y-auto">
+                <div className={`${isRoutePanelExpanded ? 'flex-1' : 'max-h-64'} overflow-y-auto`}>
                   <div className="space-y-2">
                     {routeStops.map((stop, index) => (
-                      <div key={stop.id} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 border-l-4 border-[#87281B]">
-                        <div className="flex-shrink-0 w-8 h-8 bg-[#87281B] text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      <div key={stop.id} className="flex items-center space-x-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 border-l-4 border-[#87281B]">
+                        <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-[#87281B] text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold">
                           {stop.sequence}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">
                             {stop.name}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 hidden sm:block">
                             {stop.latitude.toFixed(4)}, {stop.longitude.toFixed(4)}
                           </p>
                         </div>
                         {index < routeStops.length - 1 && (
-                          <ChevronRight className="h-4 w-4 text-gray-400" />
+                          <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400 flex-shrink-0" />
                         )}
                       </div>
                     ))}
@@ -920,9 +929,9 @@ export default function BusDetails() {
             </Card>
           </div>
 
-          {/* Right Panel - Live Map Tracking */}
-          <div className="lg:col-span-3">
-            <Card className="h-full">
+          {/* Map Panel - Mobile: Full width, Desktop: Main content */}
+          <div className="lg:col-span-3 order-1 lg:order-2">
+            <Card className="h-64 sm:h-80 lg:h-[calc(100vh-200px)]">
               <CardContent className="p-0 h-full relative">
                 {!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === 'YOUR_API_KEY_HERE' ? (
                   <div className="h-full bg-red-50 flex items-center justify-center">
@@ -955,15 +964,15 @@ export default function BusDetails() {
                   </LoadScript>
                 )}
                 
-                {/* Map Title Overlay */}
-                <div className="absolute top-4 left-4 z-10">
-                  <div className="bg-white/80 backdrop-blur-md border border-white/20 rounded-lg px-3 py-2 shadow-lg">
-                    <h3 className="text-sm font-semibold text-gray-900">Live Tracking</h3>
+                {/* Map Title Overlay - Mobile responsive */}
+                <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10">
+                  <div className="bg-white/80 backdrop-blur-md border border-white/20 rounded-lg px-2 py-1 sm:px-3 sm:py-2 shadow-lg">
+                    <h3 className="text-xs sm:text-sm font-semibold text-gray-900">Live Tracking</h3>
                   </div>
                 </div>
                 
-                {/* Glassmorphism Follow Bus Button Overlay */}
-                <div className="absolute top-4 right-4 z-10">
+                {/* Follow Bus Button Overlay - Mobile responsive */}
+                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10">
                   <Button
                     variant={followBus ? "default" : "outline"}
                     size="sm"
@@ -972,39 +981,42 @@ export default function BusDetails() {
                       setFollowBus(!followBus)
                       console.log('🔄 Follow Bus new state:', !followBus)
                     }}
-                    className={`flex items-center space-x-2 backdrop-blur-md shadow-lg transition-all duration-200 ${
+                    className={`flex items-center space-x-1 sm:space-x-2 backdrop-blur-md shadow-lg transition-all duration-200 text-xs sm:text-sm ${
                       followBus 
                         ? 'bg-blue-500/90 text-white border-2 border-blue-400/50 hover:bg-blue-600/90' 
                         : 'bg-white/80 text-gray-700 border border-white/20 hover:bg-white/90'
                     }`}
                   >
                     {followBus ? (
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
                     ) : (
-                      <Navigation className="h-4 w-4" />
+                      <Navigation className="h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                     <span className="hidden sm:inline font-medium">
                       {followBus ? 'Following' : 'Follow Bus'}
                     </span>
+                    <span className="sm:hidden font-medium">
+                      {followBus ? 'Follow' : 'Follow'}
+                    </span>
                   </Button>
                 </div>
                 
-                {/* Driver Status Overlay */}
-                <div className="absolute bottom-4 left-4 z-10">
-                  <div className="bg-white/80 backdrop-blur-md border border-white/20 rounded-lg px-3 py-2 shadow-lg">
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-2 h-2 rounded-full ${
+                {/* Driver Status Overlay - Mobile responsive */}
+                <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 z-10">
+                  <div className="bg-white/80 backdrop-blur-md border border-white/20 rounded-lg px-2 py-1 sm:px-3 sm:py-2 shadow-lg">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
+                      <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
                         driverStatus === 'available' ? 'bg-green-500' :
                         driverStatus === 'off-duty' ? 'bg-orange-500' :
                         driverStatus === 'on-break' ? 'bg-yellow-500' :
                         'bg-red-500'
                       }`}></div>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-xs sm:text-sm font-medium text-gray-900 truncate max-w-32 sm:max-w-none">
                         {driverStatusMessage}
                       </span>
                       {driverStatus === 'available' && liveBusData && (
-                        <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                          Live Tracking
+                        <span className="text-xs text-blue-600 bg-blue-100 px-1 py-0.5 sm:px-2 sm:py-1 rounded-full hidden sm:inline">
+                          Live
                         </span>
                       )}
                     </div>
@@ -1015,30 +1027,30 @@ export default function BusDetails() {
           </div>
         </div>
 
-        {/* Bottom Section - Metrics (ETA, Speed, Distance) */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Bottom Section - Metrics (ETA, Speed, Distance) - Mobile responsive */}
+        <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <Card className={`bg-gradient-to-r border-2 ${
             driverStatus === 'available' 
               ? 'from-blue-50 to-blue-100 border-blue-200' 
               : 'from-gray-50 to-gray-100 border-gray-300'
           }`}>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 sm:p-6 text-center">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <Timer className={`h-6 w-6 ${driverStatus === 'available' ? 'text-blue-600' : 'text-gray-400'}`} />
-                <span className={`text-lg font-semibold ${driverStatus === 'available' ? 'text-blue-800' : 'text-gray-500'}`}>ETA</span>
+                <Timer className={`h-5 w-5 sm:h-6 sm:w-6 ${driverStatus === 'available' ? 'text-blue-600' : 'text-gray-400'}`} />
+                <span className={`text-sm sm:text-lg font-semibold ${driverStatus === 'available' ? 'text-blue-800' : 'text-gray-500'}`}>ETA</span>
                 {isCalculatingETA && driverStatus === 'available' && (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                  <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-blue-600"></div>
                 )}
               </div>
-              <p className={`text-3xl font-bold ${driverStatus === 'available' ? 'text-blue-900' : 'text-gray-400'}`}>
-                {driverStatus === 'available' ? (etaWithTraffic || eta) : 'Not Available'}
+              <p className={`text-2xl sm:text-3xl font-bold ${driverStatus === 'available' ? 'text-blue-900' : 'text-gray-400'}`}>
+                {driverStatus === 'available' ? (etaWithTraffic || eta) : 'N/A'}
               </p>
-              <p className={`text-sm mt-1 ${driverStatus === 'available' ? 'text-blue-600' : 'text-gray-500'}`}>
+              <p className={`text-xs sm:text-sm mt-1 ${driverStatus === 'available' ? 'text-blue-600' : 'text-gray-500'}`}>
                 {driverStatus === 'available' ? (
                   trafficDelay > 0 ? (
-                    <>
-                      With Traffic • +{trafficDelay}min delay
-                      <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
+                    <div className="space-y-1">
+                      <div>With Traffic • +{trafficDelay}min delay</div>
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs ${
                         trafficCondition === 'light' ? 'bg-green-100 text-green-800' :
                         trafficCondition === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
                         trafficCondition === 'heavy' ? 'bg-red-100 text-red-800' :
@@ -1046,12 +1058,12 @@ export default function BusDetails() {
                       }`}>
                         {trafficCondition} traffic
                       </span>
-                    </>
+                    </div>
                   ) : (
                     'Estimated Time of Arrival'
                   )
                 ) : (
-                  driverStatusMessage
+                  <span className="truncate block">{driverStatusMessage}</span>
                 )}
               </p>
             </CardContent>
@@ -1062,16 +1074,16 @@ export default function BusDetails() {
               ? 'from-green-50 to-green-100 border-green-200' 
               : 'from-gray-50 to-gray-100 border-gray-300'
           }`}>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 sm:p-6 text-center">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <Gauge className={`h-6 w-6 ${driverStatus === 'available' ? 'text-green-600' : 'text-gray-400'}`} />
-                <span className={`text-lg font-semibold ${driverStatus === 'available' ? 'text-green-800' : 'text-gray-500'}`}>Speed</span>
+                <Gauge className={`h-5 w-5 sm:h-6 sm:w-6 ${driverStatus === 'available' ? 'text-green-600' : 'text-gray-400'}`} />
+                <span className={`text-sm sm:text-lg font-semibold ${driverStatus === 'available' ? 'text-green-800' : 'text-gray-500'}`}>Speed</span>
               </div>
-              <p className={`text-3xl font-bold ${driverStatus === 'available' ? 'text-green-900' : 'text-gray-400'}`}>
-                {driverStatus === 'available' ? speed : 'Not Available'}
+              <p className={`text-2xl sm:text-3xl font-bold ${driverStatus === 'available' ? 'text-green-900' : 'text-gray-400'}`}>
+                {driverStatus === 'available' ? speed : 'N/A'}
               </p>
-              <p className={`text-sm mt-1 ${driverStatus === 'available' ? 'text-green-600' : 'text-gray-500'}`}>
-                {driverStatus === 'available' ? 'Current Speed' : driverStatusMessage}
+              <p className={`text-xs sm:text-sm mt-1 ${driverStatus === 'available' ? 'text-green-600' : 'text-gray-500'}`}>
+                {driverStatus === 'available' ? 'Current Speed' : <span className="truncate block">{driverStatusMessage}</span>}
               </p>
             </CardContent>
           </Card>
@@ -1081,16 +1093,16 @@ export default function BusDetails() {
               ? 'from-purple-50 to-purple-100 border-purple-200' 
               : 'from-gray-50 to-gray-100 border-gray-300'
           }`}>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 sm:p-6 text-center">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <Route className={`h-6 w-6 ${driverStatus === 'available' ? 'text-purple-600' : 'text-gray-400'}`} />
-                <span className={`text-lg font-semibold ${driverStatus === 'available' ? 'text-purple-800' : 'text-gray-500'}`}>Distance</span>
+                <Route className={`h-5 w-5 sm:h-6 sm:w-6 ${driverStatus === 'available' ? 'text-purple-600' : 'text-gray-400'}`} />
+                <span className={`text-sm sm:text-lg font-semibold ${driverStatus === 'available' ? 'text-purple-800' : 'text-gray-500'}`}>Distance</span>
               </div>
-              <p className={`text-3xl font-bold ${driverStatus === 'available' ? 'text-purple-900' : 'text-gray-400'}`}>
-                {driverStatus === 'available' ? distance : 'Not Available'}
+              <p className={`text-2xl sm:text-3xl font-bold ${driverStatus === 'available' ? 'text-purple-900' : 'text-gray-400'}`}>
+                {driverStatus === 'available' ? distance : 'N/A'}
               </p>
-              <p className={`text-sm mt-1 ${driverStatus === 'available' ? 'text-purple-600' : 'text-gray-500'}`}>
-                {driverStatus === 'available' ? 'Distance to Stop' : driverStatusMessage}
+              <p className={`text-xs sm:text-sm mt-1 ${driverStatus === 'available' ? 'text-purple-600' : 'text-gray-500'}`}>
+                {driverStatus === 'available' ? 'Distance to Stop' : <span className="truncate block">{driverStatusMessage}</span>}
               </p>
             </CardContent>
           </Card>
