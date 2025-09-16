@@ -4,15 +4,30 @@ import { Button } from '@/components/ui/button'
 
 interface BusSearchResult {
   id: string
-  busNumber: string
-  route: string
+  connectionType: 'direct' | 'transfer'
+  route: {
+    id: string
+    routeNumber: string
+    routeName: string
+    from: string
+    to: string
+  }
   from: string
   to: string
-  departureTime: string
-  arrivalTime: string
-  fare: number
-  distance: string
-  duration: string
+  fromLocation: {
+    lat: number
+    lng: number
+    name: string
+    distance: string
+  }
+  toLocation: {
+    lat: number
+    lng: number
+    name: string
+    distance: string
+  }
+  estimatedTime: string
+  estimatedFare: number
   stops: string[]
   status: 'on-time' | 'delayed' | 'early'
   busType: 'AC' | 'Non-AC' | 'Deluxe'

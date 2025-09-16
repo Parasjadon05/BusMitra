@@ -2,13 +2,15 @@ import { googleMapsService, PlaceResult, Location } from './googleMapsService'
 import { routeService, Route, Bus, Driver } from './routeService'
 
 export interface SearchSuggestion {
-  coordinates // Check if both locations are within max distance of the route
-    (coordinates: any): unknown
   id: string
   address: string
   placeId?: string
   location?: Location
   type?: string
+  coordinates: {
+    lat: number
+    lng: number
+  }
 }
 
 export interface BusSearchResult {

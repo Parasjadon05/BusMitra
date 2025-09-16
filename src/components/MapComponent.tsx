@@ -3,7 +3,7 @@ import maplibregl from 'maplibre-gl'
 import { mapConfig } from '@/config/tomtom.config'
 import { UserLocation } from '@/services/mapService'
 
-export interface BusStand {
+interface BusStand {
   id: string
   name: string
   location: {
@@ -14,6 +14,7 @@ export interface BusStand {
   routes: string[]
   distance?: number
 }
+
 import { MapPin, Navigation, Bus, Wifi, WifiOff } from 'lucide-react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -51,7 +52,7 @@ interface MapComponentProps {
 
 export default function MapComponent({
   userLocation,
-  userAddress,
+  userAddress: _userAddress,
   busStands,
   onBusStandSelect,
   selectedBusStand,

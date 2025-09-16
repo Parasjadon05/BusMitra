@@ -6,6 +6,20 @@ export interface UserLocation {
   accuracy?: number
 }
 
+export interface BusStand {
+  id: string
+  name: string
+  location: {
+    lat: number
+    lng: number
+  }
+  address: string
+  routes: string[]
+  distance?: number
+  coordinates: [number, number]
+  type: string
+}
+
 export class MapService {
   /**
    * Get user's current location using browser geolocation API

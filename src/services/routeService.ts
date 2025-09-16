@@ -196,3 +196,31 @@ export const routeService = {
     }
   }
 }
+
+// Export missing interfaces
+export interface Bus {
+  id: string
+  number: string
+  type: string
+  capacity: number
+}
+
+export interface Driver {
+  id: string
+  name: string
+  phone: string
+  license: string
+}
+
+export interface RouteDetails {
+  id: string
+  name: string
+  stops: RouteStop[]
+}
+
+export interface RouteStop {
+  id: string
+  name: string
+  latitude: number
+  longitude: number
+}
