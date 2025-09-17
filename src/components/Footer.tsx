@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from './ui/badge'
+import { useTranslation } from 'react-i18next'
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation()
   return (
     <footer className="bg-white border-t">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -20,7 +22,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Features</h4>
+            <h4 className="font-semibold text-gray-900 mb-4">{t('footer.features')}</h4>
             <ul className="space-y-2 text-[#87281B]">
               <li>Real-time Tracking</li>
               <li>Route Planning</li>
@@ -29,26 +31,26 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
+            <h4 className="font-semibold text-gray-900 mb-4">{t('footer.support')}</h4>
             <ul className="space-y-2 text-gray-600">
               <li>
                 <Link to="/help" className="hover:text-[#87281B]">
-                  Help Center
+                  {t('footer.help')}
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="hover:text-[#87281B]">
-                  Contact Us
+                  {t('footer.contact')}
                 </Link>
               </li>
               <li>
                 <Link to="/privacy" className="hover:text-[#87281B]">
-                  Privacy Policy
+                  {t('footer.privacy')}
                 </Link>
               </li>
               <li>
                 <Link to="/terms" className="hover:text-[#87281B]">
-                  Terms of Service
+                  {t('footer.terms')}
                 </Link>
               </li>
             </ul>

@@ -11,8 +11,10 @@ import {
 } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { useTranslation } from 'react-i18next'
 
 export default function LandingPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -107,13 +109,11 @@ export default function LandingPage() {
         {/* Hero Section */}
         <div className="text-center py-16">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Never Miss Your
-            <span className="text-[#87281B] block">Bus Again</span>
+            {t('hero.heading.line1')}
+            <span className="text-[#87281B] block">{t('hero.heading.line2')}</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Track buses in real-time, get smart notifications, and plan your
-            perfect journey. Your intelligent companion for stress-free public
-            transportation.
+            {t('hero.sub')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
@@ -121,7 +121,7 @@ export default function LandingPage() {
               onClick={handleGetStarted}
               className="bg-[#87281B] hover:bg-[#601c13] text-white px-8 py-3 text-lg"
             >
-              Start Tracking Now
+              {t('cta.start')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
@@ -130,7 +130,7 @@ export default function LandingPage() {
               className="px-8 py-3 text-lg"
               onClick={() => window.open('https://youtu.be/9RI1z0WiGng', '_blank')}
             >
-              Watch Demo
+              {t('cta.demo')}
             </Button>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function LandingPage() {
         <div className="py-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need for Smart Commuting
+              {t('features.title')}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Powerful features designed to make your daily commute effortless
@@ -178,7 +178,7 @@ export default function LandingPage() {
         <div className="py-16 bg-white rounded-2xl shadow-sm">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[#87281B] mb-4">
-              Why Choose BusMitra?
+              {t('benefits.title')}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Join thousands of smart commuters who save time and reduce stress
