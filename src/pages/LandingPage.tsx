@@ -124,7 +124,12 @@ export default function LandingPage() {
               Start Tracking Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="outline" size="lg" className="px-8 py-3 text-lg">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="px-8 py-3 text-lg"
+              onClick={() => window.open('https://youtu.be/9RI1z0WiGng', '_blank')}
+            >
               Watch Demo
             </Button>
           </div>
